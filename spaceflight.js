@@ -3,6 +3,11 @@ let ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+let mouse = {
+  x: canvas.width / 2,
+  y: canvas.height / 2
+};
+
 let star = {
   colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA'],
   lineCap: 'round',
@@ -25,6 +30,7 @@ let stars = [];
 ctx.lineCap = star.lineCap;
 ctx.shadowBlur = star.shadowBlur;
 draw();
+document.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
@@ -52,8 +58,8 @@ function createStars () {
   if (Math.random() < star.probability) {
     let angle = Math.random() * Math.PI * 2;
     stars.push({
-      x: Math.cos(angle) * star.spawnRadius + canvas.width / 2,
-      y: Math.sin(angle) * star.spawnRadius + canvas.height / 2,
+      x: Math.cos(angle) * star.spawnRadius + mouse.x,
+      y: Math.sin(angle) * star.spawnRadius + mouse.y,
       color: star.colors[Math.floor(Math.random() * star.colors.length)],
       depth: star.lowestDepth + Math.random() * (star.highestDepth - star.lowestDepth),
       length: star.lowestLength + Math.random() * (star.highestLength - star.lowestLength),
@@ -75,6 +81,11 @@ function removeStars () {
       s.length += s.depth;
     }
   }
+}
+
+function mouseMoveHandler (e) {
+  mouse.x = e.clientX - canvas.offsetLeft;
+  mouse.y = e.clientY - canvas.offsetTop;
 }
 
 function resizeHandler () {
