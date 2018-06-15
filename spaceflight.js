@@ -7,16 +7,16 @@ let star = {
   colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA'],
   lineCap: 'round',
   shadowBlur: 10,
-  highestDepth: 0.1,
-  highestLength: 6,
+  highestDepth: 0.05,
+  highestLength: 4,
   highestLineWidth: 2.5,
   highestSpeed: 4,
-  lowestDepth: 0.05,
-  lowestLength: 4,
+  lowestDepth: 0.01,
+  lowestLength: 2,
   lowestLineWidth: 1.5,
   lowestSpeed: 2,
   probability: 0.3,
-  spawnRadius: 30,
+  spawnRadius: 50,
   speed: 3
 };
 
