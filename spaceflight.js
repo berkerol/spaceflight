@@ -22,12 +22,12 @@ let star = {
 
 let stars = [];
 
-ctx.shadowBlur = star.shadowBlur;
 draw();
 document.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
+  ctx.shadowBlur = star.shadowBlur;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let s of stars) {
     drawStar(s);
