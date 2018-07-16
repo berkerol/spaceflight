@@ -9,15 +9,15 @@ let mouse = {
 };
 
 let star = {
-  colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC'],
+  colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA'],
   shadowBlur: 10,
-  highestDepth: 0.02,
   highestRadius: 2,
-  highestSpeed: 8,
-  lowestDepth: 0.01,
+  highestProximity: 1.5,
   lowestRadius: 1,
-  lowestSpeed: 4,
-  probability: 0.4
+  lowestProximity: 0.5,
+  depthMultiplier: 0.005,
+  speedMultiplier: 6,
+  probability: 0.8
 };
 
 let stars = [];
@@ -48,13 +48,14 @@ function drawStar (s) {
 
 function createStars () {
   if (Math.random() < star.probability) {
+    let proximity = star.lowestProximity + Math.random() * (star.highestProximity - star.lowestProximity);
     stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       radius: star.lowestRadius + Math.random() * (star.highestRadius - star.lowestRadius),
       color: star.colors[Math.floor(Math.random() * star.colors.length)],
-      depth: star.lowestDepth + Math.random() * (star.highestDepth - star.lowestDepth),
-      speed: star.lowestSpeed + Math.random() * (star.highestSpeed - star.lowestSpeed)
+      depth: star.depthMultiplier * proximity,
+      speed: star.speedMultiplier * proximity
     });
   }
 }
