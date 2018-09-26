@@ -1,6 +1,3 @@
-theme:           jekyll-theme-cayman
-title:           Spaceflight
-description:     Enter a journey into the depths of space
-is_user_page:    false
-is_project_page: true
-show_downloads:  true
+theme: jekyll-theme-cayman
+title: Spaceflight
+watch_url: spaceflight.html
