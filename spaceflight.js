@@ -1,7 +1,13 @@
+/* global performance */
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
+const getTime = typeof performance === 'function' ? performance.now : Date.now;
+const FRAME_DURATION = 1000 / 58;
+let then = getTime();
+let acc = 0;
 
 let mouse = {
   x: canvas.width / 2,
@@ -27,13 +33,26 @@ document.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
+  let now = getTime();
+  let ms = now - then;
+  let frames = 0;
+  then = now;
+  if (ms < 1000) {
+    acc += ms;
+    while (acc >= FRAME_DURATION) {
+      frames++;
+      acc -= FRAME_DURATION;
+    }
+  } else {
+    ms = 0;
+  }
   ctx.shadowBlur = star.shadowBlur;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let s of stars) {
     drawStar(s);
   }
   createStars();
-  removeStars();
+  removeStars(frames);
   window.requestAnimationFrame(draw);
 }
 
@@ -60,15 +79,15 @@ function createStars () {
   }
 }
 
-function removeStars () {
+function removeStars (frames) {
   for (let i = stars.length - 1; i >= 0; i--) {
     let s = stars[i];
     if (s.x < 0 || s.x > canvas.width || s.y < 0 || s.y > canvas.height) {
       stars.splice(i, 1);
     } else {
-      s.x += (s.x - mouse.x) / canvas.width * s.speed;
-      s.y += (s.y - mouse.y) / canvas.height * s.speed;
-      s.radius += s.depth;
+      s.x += (s.x - mouse.x) / canvas.width * s.speed * frames;
+      s.y += (s.y - mouse.y) / canvas.height * s.speed * frames;
+      s.radius += s.depth * frames;
     }
   }
 }
