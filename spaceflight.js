@@ -24,10 +24,12 @@ let mouse = {
 };
 
 let star = {
-  colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA'],
-  shadowBlur: 10,
+  colors: [[255, 255, 255], [240, 240, 240], [225, 225, 225], [210, 210, 210], [195, 195, 195], [180, 180, 180]],
+  shadowBlur: 20,
+  highestAlphaIncrease: 0.015,
   highestRadius: 2,
   highestProximity: 1.5,
+  lowestAlphaIncrease: 0.005,
   lowestRadius: 1,
   lowestProximity: 0.5,
   depthMultiplier: 0.005,
@@ -67,8 +69,9 @@ function draw () {
 }
 
 function drawStar (s) {
-  ctx.shadowColor = s.color;
-  ctx.fillStyle = s.color;
+  let color = 'rgba(' + s.color[0] + ',' + s.color[1] + ',' + s.color[2] + ',' + s.alpha + ')';
+  ctx.shadowColor = color;
+  ctx.fillStyle = color;
   ctx.beginPath();
   ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
   ctx.fill();
@@ -83,6 +86,8 @@ function createStars () {
       y: Math.random() * canvas.height,
       radius: star.lowestRadius + Math.random() * (star.highestRadius - star.lowestRadius),
       color: star.colors[Math.floor(Math.random() * star.colors.length)],
+      alpha: 0,
+      alphaIncrease: star.lowestAlphaIncrease + Math.random() * (star.highestAlphaIncrease - star.lowestAlphaIncrease),
       depth: star.depthMultiplier * proximity,
       speed: star.speedMultiplier * proximity
     });
@@ -98,6 +103,11 @@ function removeStars (frames) {
       s.x += (s.x - mouse.x) / canvas.width * s.speed * frames;
       s.y += (s.y - mouse.y) / canvas.height * s.speed * frames;
       s.radius += s.depth * frames;
+      if (s.alpha + s.alphaIncrease * frames <= 1.0) {
+        s.alpha += s.alphaIncrease * frames;
+      } else {
+        s.alpha = 1.0;
+      }
     }
   }
 }
