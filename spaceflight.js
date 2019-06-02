@@ -1,7 +1,7 @@
 /* global performance */
 /* global FPSMeter */
-let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext('2d');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -9,7 +9,7 @@ const getTime = typeof performance === 'function' ? performance.now : Date.now;
 const FRAME_DURATION = 1000 / 58;
 let then = getTime();
 let acc = 0;
-let meter = new FPSMeter({
+const meter = new FPSMeter({
   left: canvas.width - 130 + 'px',
   top: 'auto',
   bottom: '12px',
@@ -18,12 +18,12 @@ let meter = new FPSMeter({
   graph: 1
 });
 
-let mouse = {
+const mouse = {
   x: canvas.width / 2,
   y: canvas.height / 2
 };
 
-let star = {
+const star = {
   colors: [[255, 255, 255], [240, 240, 240], [225, 225, 225], [210, 210, 210], [195, 195, 195], [180, 180, 180]],
   shadowBlur: 20,
   highestAlphaIncrease: 0.015,
@@ -37,14 +37,14 @@ let star = {
   probability: 0.8
 };
 
-let stars = [];
+const stars = [];
 
 draw();
 document.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
-  let now = getTime();
+  const now = getTime();
   let ms = now - then;
   let frames = 0;
   then = now;
@@ -60,7 +60,7 @@ function draw () {
   meter.tick();
   ctx.shadowBlur = star.shadowBlur;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let s of stars) {
+  for (const s of stars) {
     drawStar(s);
   }
   createStars();
@@ -69,7 +69,7 @@ function draw () {
 }
 
 function drawStar (s) {
-  let color = 'rgba(' + s.color[0] + ',' + s.color[1] + ',' + s.color[2] + ',' + s.alpha + ')';
+  const color = 'rgba(' + s.color[0] + ',' + s.color[1] + ',' + s.color[2] + ',' + s.alpha + ')';
   ctx.shadowColor = color;
   ctx.fillStyle = color;
   ctx.beginPath();
@@ -80,7 +80,7 @@ function drawStar (s) {
 
 function createStars () {
   if (Math.random() < star.probability) {
-    let proximity = star.lowestProximity + Math.random() * (star.highestProximity - star.lowestProximity);
+    const proximity = star.lowestProximity + Math.random() * (star.highestProximity - star.lowestProximity);
     stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -96,7 +96,7 @@ function createStars () {
 
 function removeStars (frames) {
   for (let i = stars.length - 1; i >= 0; i--) {
-    let s = stars[i];
+    const s = stars[i];
     if (s.x < 0 || s.x > canvas.width || s.y < 0 || s.y > canvas.height) {
       stars.splice(i, 1);
     } else {
