@@ -69,7 +69,7 @@ function draw () {
 }
 
 function drawStar (s) {
-  const color = 'rgba(' + s.color[0] + ',' + s.color[1] + ',' + s.color[2] + ',' + s.alpha + ')';
+  const color = `rgba(${s.color[0]}, ${s.color[1]}, ${s.color[2]}, ${s.alpha})`;
   ctx.shadowColor = color;
   ctx.fillStyle = color;
   ctx.beginPath();
