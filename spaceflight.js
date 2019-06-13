@@ -57,8 +57,8 @@ function draw () {
     ms = 0;
   }
   meter.tick();
-  ctx.shadowBlur = star.shadowBlur;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.shadowBlur = star.shadowBlur;
   for (const s of stars) {
     drawStar(s);
   }
@@ -74,7 +74,6 @@ function drawStar (s) {
   ctx.beginPath();
   ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
   ctx.fill();
-  ctx.closePath();
 }
 
 function createStars () {
