@@ -101,7 +101,7 @@ function removeStars (frames) {
       s.x += (s.x - mouse.x) / canvas.width * s.speed * frames;
       s.y += (s.y - mouse.y) / canvas.height * s.speed * frames;
       s.radius += s.depth * frames;
-      s.alpha = Math.min(s.alpha + s.alphaIncrease * frames, 1.0);
+      s.alpha = Math.min(s.alpha + s.alphaIncrease * frames, 1);
     }
   }
 }
