@@ -5,7 +5,7 @@
 [![ECMAScript](https://img.shields.io/badge/ECMAScript-latest-brightgreen.svg)](https://www.ecma-international.org/ecma-262)
 [![license](https://img.shields.io/badge/license-GNU%20GPL%20v3.0-blue.svg)](https://github.com/berkerol/spaceflight/blob/master/LICENSE)
 
-Enter a journey into the depths of space. Stars escape from mouse.
+Enter a journey into the depths of space. Stars escape from mouse. Pause by pressing _P_.
 
 [![button](watch.png)](https://berkerol.github.io/spaceflight/spaceflight.html)
 

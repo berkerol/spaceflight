@@ -8,6 +8,7 @@ const getTime = typeof performance === 'function' ? performance.now : Date.now;
 const FRAME_DURATION = 1000 / 58;
 let then = getTime();
 let acc = 0;
+let animation;
 const meter = new FPSMeter({
   left: canvas.width - 130 + 'px',
   top: 'auto',
@@ -39,6 +40,7 @@ const star = {
 const stars = [];
 
 draw();
+document.addEventListener('keyup', keyUpHandler);
 document.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('resize', resizeHandler);
 
@@ -64,7 +66,7 @@ function draw () {
   }
   createStars();
   removeStars(frames);
-  window.requestAnimationFrame(draw);
+  animation = window.requestAnimationFrame(draw);
 }
 
 function drawStar (s) {
@@ -106,9 +108,22 @@ function removeStars (frames) {
   }
 }
 
+function keyUpHandler (e) {
+  if (e.keyCode === 80) {
+    if (animation === undefined) {
+      animation = window.requestAnimationFrame(draw);
+    } else {
+      window.cancelAnimationFrame(animation);
+      animation = undefined;
+    }
+  }
+}
+
 function mouseMoveHandler (e) {
-  mouse.x = e.clientX - canvas.offsetLeft;
-  mouse.y = e.clientY - canvas.offsetTop;
+  if (animation !== undefined) {
+    mouse.x = e.clientX - canvas.offsetLeft;
+    mouse.y = e.clientY - canvas.offsetTop;
+  }
 }
 
 function resizeHandler () {
