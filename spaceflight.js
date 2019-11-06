@@ -1,24 +1,4 @@
-/* global performance FPSMeter */
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const getTime = typeof performance === 'function' ? performance.now : Date.now;
-const FRAME_THRESHOLD = 300;
-const FRAME_DURATION = 1000 / 58;
-let then = getTime();
-let acc = 0;
-let animation;
-const meter = new FPSMeter({
-  left: canvas.width - 130 + 'px',
-  top: 'auto',
-  bottom: '12px',
-  theme: 'colorful',
-  heat: 1,
-  graph: 1
-});
-
+/* global canvas ctx animation addPause addResize loop paintCircle generateRandomNumber generateRandomInteger */
 const mouse = {
   x: canvas.width / 2,
   y: canvas.height / 2
@@ -40,53 +20,31 @@ const star = {
 
 const stars = [];
 
-draw();
-document.addEventListener('keyup', keyUpHandler);
+addPause();
+addResize();
 document.addEventListener('mousemove', mouseMoveHandler);
-window.addEventListener('resize', resizeHandler);
 
-function draw () {
-  const now = getTime();
-  let ms = now - then;
-  let frames = 0;
-  then = now;
-  if (ms < FRAME_THRESHOLD) {
-    acc += ms;
-    while (acc >= FRAME_DURATION) {
-      frames++;
-      acc -= FRAME_DURATION;
-    }
-  }
-  meter.tick();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+loop(function (frames) {
   ctx.shadowBlur = star.shadowBlur;
   for (const s of stars) {
-    drawStar(s);
+    const color = `rgba(${s.color[0]}, ${s.color[1]}, ${s.color[2]}, ${s.alpha})`;
+    ctx.shadowColor = color;
+    paintCircle(s.x, s.y, s.radius, color);
   }
   createStars();
   removeStars(frames);
-  animation = window.requestAnimationFrame(draw);
-}
-
-function drawStar (s) {
-  const color = `rgba(${s.color[0]}, ${s.color[1]}, ${s.color[2]}, ${s.alpha})`;
-  ctx.shadowColor = color;
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
-  ctx.fill();
-}
+});
 
 function createStars () {
   if (Math.random() < star.probability) {
-    const proximity = star.lowestProximity + Math.random() * (star.highestProximity - star.lowestProximity);
+    const proximity = generateRandomNumber(star.lowestProximity, star.highestProximity);
     stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: star.lowestRadius + Math.random() * (star.highestRadius - star.lowestRadius),
-      color: star.colors[Math.floor(Math.random() * star.colors.length)],
+      radius: generateRandomNumber(star.lowestRadius, star.highestRadius),
+      color: star.colors[generateRandomInteger(star.colors.length)],
       alpha: 0,
-      alphaIncrease: star.lowestAlphaIncrease + Math.random() * (star.highestAlphaIncrease - star.lowestAlphaIncrease),
+      alphaIncrease: generateRandomNumber(star.lowestAlphaIncrease, star.highestAlphaIncrease),
       depth: star.depthMultiplier * proximity,
       speed: star.speedMultiplier * proximity
     });
@@ -107,25 +65,9 @@ function removeStars (frames) {
   }
 }
 
-function keyUpHandler (e) {
-  if (e.keyCode === 80) {
-    if (animation === undefined) {
-      animation = window.requestAnimationFrame(draw);
-    } else {
-      window.cancelAnimationFrame(animation);
-      animation = undefined;
-    }
-  }
-}
-
 function mouseMoveHandler (e) {
   if (animation !== undefined) {
     mouse.x = e.clientX - canvas.offsetLeft;
     mouse.y = e.clientY - canvas.offsetTop;
   }
-}
-
-function resizeHandler () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
 }
